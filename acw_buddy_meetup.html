@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACW Buddy Meetup 2026 🤝</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#F4F3F0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 60px;color:#1a1a1a}
+.app{width:100%;max-width:600px}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.top-logo{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#6b6b6b}
+.top-date{font-size:11px;font-weight:700;color:#a0a0a0}
+.progress-area{margin-bottom:20px}
+.step-track{display:flex;gap:4px;margin-bottom:7px}
+.step-dot{height:5px;flex:1;border-radius:99px;background:#E2DFD8;transition:background 0.4s,transform 0.2s}
+.step-dot.done{background:#534AB7}
+.step-dot.active{background:#534AB7;transform:scaleY(1.6)}
+.step-label{display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#6b6b6b}
+.card-wrap{width:100%}
+.card{background:#fff;border-radius:16px;border:1.5px solid #E2DFD8;box-shadow:0 4px 20px rgba(0,0,0,0.07),0 1px 4px rgba(0,0,0,0.04);padding:28px 28px 24px;position:relative;overflow:hidden;animation:card-in 0.32s cubic-bezier(.22,.68,0,1.2)}
+@keyframes card-in{from{opacity:0;transform:translateY(20px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.card.exit{animation:card-out 0.22s ease forwards}
+@keyframes card-out{to{opacity:0;transform:translateY(-16px) scale(0.97)}}
+.card-stripe{position:absolute;top:0;left:0;right:0;height:4px;border-radius:16px 16px 0 0}
+.stripe-purple{background:#534AB7}
+.stripe-blue{background:#378ADD}
+.stripe-amber{background:#EF9F27}
+.stripe-teal{background:#1D9E75}
+.stripe-multi{background:linear-gradient(90deg,#534AB7,#1D9E75)}
+.eyebrow{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:#a0a0a0;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.chapter-tag{background:#EEEDFE;color:#3C3489;padding:2px 9px;border-radius:99px;font-size:9.5px}
+.card-emoji{font-size:36px;margin-bottom:10px;display:block}
+.card-title{font-family:'Caveat',cursive;font-size:28px;font-weight:700;line-height:1.2;margin-bottom:7px;color:#1a1a1a}
+.card-sub{font-size:13px;color:#6b6b6b;line-height:1.65;margin-bottom:20px}
+.split-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.inp-col{display:flex;flex-direction:column;gap:5px}
+.side-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:4px}
+.side-lbl.a{color:#185FA5}.side-lbl.b{color:#0F6E56}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sdot.a{background:#378ADD}.sdot.b{background:#1D9E75}
+input[type=text],input[type=email],textarea{font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:600;color:#1a1a1a;background:#F4F3F0;border:2px solid #D3D1C7;border-radius:10px;padding:9px 12px;width:100%;outline:none;resize:none;line-height:1.5;transition:border-color 0.15s,background 0.15s}
+input::placeholder,textarea::placeholder{color:#a0a0a0;font-weight:400}
+input:focus,textarea:focus{border-color:#534AB7;background:#fff;box-shadow:0 0 0 3px rgba(83,74,183,0.1)}
+input.invalid,textarea.invalid{border-color:#D85A30!important;background:#FAECE7!important}
+.ferr{font-size:11px;font-weight:700;color:#993C1D;display:none;align-items:center;gap:3px;margin-top:1px}
+.ferr.show{display:flex}
+.cname{font-family:'Caveat',cursive!important;font-size:22px!important;font-weight:700!important}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.tag-btn{font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;padding:7px 14px;border-radius:99px;border:1.5px solid #D3D1C7;background:#fff;color:#6b6b6b;cursor:pointer;transition:all 0.13s;user-select:none}
+.tag-btn:hover{border-color:#534AB7;color:#1a1a1a;transform:translateY(-1px)}
+.tag-btn.on-amber{background:#FAEEDA;border-color:#EF9F27;color:#633806}
+.tag-btn.on-teal{background:#E1F5EE;border-color:#1D9E75;color:#085041}
+.tag-btn.on-purple{background:#EEEDFE;border-color:#534AB7;color:#3C3489}
+.tag-btn.on-blue{background:#E6F1FB;border-color:#378ADD;color:#0C447C}
+.terr{font-size:11px;font-weight:700;color:#993C1D;display:none;align-items:center;gap:3px;margin-top:6px}
+.terr.show{display:flex}
+.card-nav{display:flex;align-items:center;justify-content:space-between;margin-top:22px;gap:10px}
+.btn-next{display:flex;align-items:center;gap:7px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;background:#534AB7;color:white;border:none;border-radius:11px;padding:11px 22px;cursor:pointer;transition:all 0.15s;box-shadow:0 3px 12px rgba(83,74,183,0.28)}
+.btn-next:hover{background:#3C3489;transform:translateY(-2px);box-shadow:0 6px 16px rgba(83,74,183,0.35)}
+.btn-next:active{transform:scale(0.98)}
+.btn-back{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:#6b6b6b;background:none;border:none;cursor:pointer;padding:6px 2px;display:flex;align-items:center;gap:4px;transition:color 0.13s}
+.btn-back:hover{color:#1a1a1a}
+.success-wrap{text-align:center;padding:32px 24px 28px}
+.success-wrap h2{font-family:'Caveat',cursive;font-size:36px;font-weight:700;margin:12px 0 8px;color:#1a1a1a}
+.success-wrap p{font-size:13.5px;color:#6b6b6b;line-height:1.7;max-width:380px;margin:0 auto}
+.points-ref{margin-top:18px;background:#FFFDF7;border:1.5px solid #E2DFD8;border-radius:12px;padding:14px 16px;font-size:12px}
+.points-ref-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#a0a0a0;margin-bottom:10px}
+.points-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.points-col{border-radius:10px;padding:10px 10px 8px}
+.points-col-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:7px}
+.points-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;gap:6px}
+.points-row:last-child{margin-bottom:0}
+.points-row span:first-child{color:#1a1a1a;font-size:11px;line-height:1.3}
+.pts-pill{border-radius:99px;padding:1px 7px;font-weight:800;font-size:11px;white-space:nowrap;color:white}
+.points-footer{margin-top:10px;padding-top:9px;border-top:1px solid #E2DFD8;font-size:11px;color:#6b6b6b}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="top-bar">
+    <div class="top-logo">✦ Agency Champions of WISE</div>
+    <div class="top-date">📅 14 May 2026</div>
+  </div>
+  <div class="progress-area">
+    <div class="step-track" id="stepTrack"></div>
+    <div class="step-label"><span id="lblLeft">Let's go!</span><span id="lblRight">Step 1 of 12</span></div>
+  </div>
+  <div class="card-wrap" id="cardWrap"></div>
+</div>
+
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbycjn7TVtLn6RIDgXgBkbDyHjokjhscbTEbbFBoSVWw53beB-cRRHwyn7PDJ8ONLeRy/exec';
+
+const state = {
+  step:0,
+  nameA:'', nameB:'', agencyA:'', agencyB:'', emailA:'', emailB:'',
+  q1a:'', q1b:'', q2a:'', q2b:'',
+  catA:[], catB:[],
+  q3a:'', q3b:'', q4:'', q5:'',
+  channel:'', freq:'', q6:''
+};
+
+const STEPS = [
+  {id:'intro'},{id:'buddyA'},{id:'buddyB'},
+  {id:'q1'},{id:'q2'},{id:'catA'},{id:'catB'},
+  {id:'q3'},{id:'q4'},{id:'q5'},
+  {id:'checkin'},{id:'q6'},{id:'done'}
+];
+
+const CHAPTERS = [
+  'Welcome','Meet Buddy A','Meet Buddy B',
+  'About You','About You','ACW Game Plan','ACW Game Plan',
+  'ACW Game Plan','Work Together','Work Together',
+  'Stay Connected','Next Steps','Done!'
+];
+
+function renderProgress() {
+  const track = document.getElementById('stepTrack');
+  track.innerHTML = '';
+  STEPS.forEach((s,i) => {
+    const d = document.createElement('div');
+    d.className = 'step-dot'+(i<state.step?' done':i===state.step?' active':'');
+    track.appendChild(d);
+  });
+  document.getElementById('lblLeft').textContent = CHAPTERS[state.step]||'';
+  document.getElementById('lblRight').textContent = 'Step '+(state.step+1)+' of '+STEPS.length;
+}
+
+function tog(el,color,key) {
+  const v=el.dataset.val, cls='on-'+color;
+  if(el.classList.contains(cls)){el.classList.remove(cls);state[key]=state[key].filter(x=>x!==v);}
+  else{el.classList.add(cls);if(!Array.isArray(state[key]))state[key]=[];state[key].push(v);}
+  const e=document.getElementById('terr-'+key);if(e)e.classList.remove('show');
+}
+function single(el,color,key) {
+  const g=el.dataset.group;
+  document.querySelectorAll('[data-group="'+g+'"]').forEach(t=>t.className=t.className.replace(/on-\w+/g,'').trim());
+  el.classList.add('on-'+color); state[key]=el.dataset.val;
+  const e=document.getElementById('terr-'+key);if(e)e.classList.remove('show');
+}
+
+function tagBtns(group,vals,color,stateKey) {
+  const icons={Learn:'📚 Learn',Grow:'🌱 Grow','Value-Add':'💎 Value-Add',Telegram:'✈️ Telegram',Slack:'💬 Slack',Teams:'💼 Teams',WhatsApp:'📱 WhatsApp',Email:'📧 Email',Monthly:'📆 Monthly',Quarterly:'🗓️ Quarterly','Ad hoc':'⚡ Ad hoc'};
+  const isArr=Array.isArray(state[stateKey]);
+  const fn=isArr?`tog(this,'${color}','${stateKey}')`:`single(this,'${color}','${stateKey}')`;
+  return vals.map(v=>`<button type="button" class="tag-btn${(isArr?state[stateKey].includes(v):state[stateKey]===v)?' on-'+color:''}" data-group="${group}" data-val="${v}" onclick="${fn}">${icons[v]||v}</button>`).join('');
+}
+
+function pointsRef() {
+  return `<div class="points-ref">
+    <div class="points-ref-title">📋 ACW Points Reference</div>
+    <div class="points-grid">
+      <div class="points-col" style="background:#E6F1FB">
+        <div class="points-col-title" style="color:#185FA5">💡 Learn</div>
+        <div class="points-row"><span>Attend WISE events</span><span class="pts-pill" style="background:#185FA5">1 pt</span></div>
+        <div class="points-row"><span>Submit product / event survey</span><span class="pts-pill" style="background:#185FA5">1 pt</span></div>
+      </div>
+      <div class="points-col" style="background:#E1F5EE">
+        <div class="points-col-title" style="color:#0F6E56">🌱 Grow</div>
+        <div class="points-row" style="align-items:flex-start"><span>Onboard users to WISE products</span><div style="text-align:right;flex-shrink:0"><div style="display:flex;gap:3px"><span class="pts-pill" style="background:#EF9F27;font-size:10px">1</span><span class="pts-pill" style="background:#D85A30;font-size:10px">25</span></div><div style="font-size:9px;color:#6b6b6b;margin-top:2px">Referral / Advanced</div></div></div>
+      </div>
+      <div class="points-col" style="background:#FAEEDA">
+        <div class="points-col-title" style="color:#BA7517">💎 Value-Add</div>
+        <div class="points-row"><span>Share case study to WISE audience</span><span class="pts-pill" style="background:#EF9F27">5 pts</span></div>
+        <div class="points-row"><span>Present WISE in agency (min 3 pax)</span><span class="pts-pill" style="background:#EF9F27">2 pts</span></div>
+        <div class="points-row"><span>Join user testing / focus groups</span><span class="pts-pill" style="background:#EF9F27">2 pts</span></div>
+        <div class="points-row"><span>Improve digital service</span><span class="pts-pill" style="background:#EF9F27">2 pts</span></div>
+      </div>
+    </div>
+    <div class="points-footer">🏆 Hit <strong>20 combined points</strong> (Mar–Nov 2026) to earn the ACW certificate. Top 10% with 1+ Advanced referral = <strong>Superstar Champ</strong>!</div>
+  </div>`;
+}
+
+const RENDERS = {
+  intro:()=>`<div class="card"><div class="card-stripe stripe-purple"></div>
+    <span class="card-emoji">🤝</span>
+    <div class="card-title">Get To Know Your Buddy!</div>
+    <div class="card-sub">Welcome to the ACW Buddy Meetup 2026! Work through <strong>12 steps</strong> together and capture what you discussed — you'll get a PDF summary at the end to keep.<br><br>Grab your buddy, sit together, and let's go! 🚀</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      <span style="background:#EEEDFE;color:#3C3489;border:1.5px solid #534AB7;border-radius:99px;padding:4px 12px;font-size:11.5px;font-weight:700">📋 12 steps</span>
+      <span style="background:#E1F5EE;color:#085041;border:1.5px solid #1D9E75;border-radius:99px;padding:4px 12px;font-size:11.5px;font-weight:700">📄 PDF at the end</span>
+      <span style="background:#FAEEDA;color:#633806;border:1.5px solid #EF9F27;border-radius:99px;padding:4px 12px;font-size:11.5px;font-weight:700">📅 14 May 2026</span>
+    </div>
+    <div class="card-nav"><div></div>
+      <button class="btn-next" id="btnNext">Let's start! →</button>
+    </div></div>`,
+
+  buddyA:()=>`<div class="card"><div class="card-stripe stripe-blue"></div>
+    <div class="eyebrow">Step 1 of 12 <span class="chapter-tag">Meet Your Buddy</span></div>
+    <span class="card-emoji">👋</span>
+    <div class="card-title">First up — who are you, Buddy A?</div>
+    <div class="card-sub">The one who opened this app goes first!</div>
+    <div class="inp-col" style="gap:9px">
+      <div><div class="side-lbl a" style="margin-bottom:5px"><span class="sdot a"></span>Your name <span style="color:#D85A30">*</span></div>
+      <input type="text" id="nameA" class="cname" placeholder="e.g. Sarah Tan" value="${state.nameA}">
+      <div class="ferr" id="ferr-nameA">⚠ Please enter your name</div></div>
+      <div><div class="side-lbl a" style="margin-bottom:5px"><span class="sdot a"></span>Agency / Team <span style="color:#D85A30">*</span></div>
+      <input type="text" id="agencyA" placeholder="e.g. MOH, MOM, GovTech..." value="${state.agencyA}">
+      <div class="ferr" id="ferr-agencyA">⚠ Please enter your agency</div></div>
+      <div><div class="side-lbl a" style="margin-bottom:5px"><span class="sdot a"></span>Email <span style="color:#a0a0a0;font-size:10px;font-weight:600">(optional — for a copy of your notes)</span></div>
+      <input type="email" id="emailA" placeholder="your.email@agency.gov.sg" value="${state.emailA}"></div>
+    </div>
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  buddyB:()=>`<div class="card"><div class="card-stripe stripe-teal"></div>
+    <div class="eyebrow">Step 2 of 12 <span class="chapter-tag">Meet Your Buddy</span></div>
+    <span class="card-emoji">🙌</span>
+    <div class="card-title">Now you, Buddy B!</div>
+    <div class="card-sub">Pass the screen over — it's your turn!</div>
+    <div class="inp-col" style="gap:9px">
+      <div><div class="side-lbl b" style="margin-bottom:5px"><span class="sdot b"></span>Your name <span style="color:#D85A30">*</span></div>
+      <input type="text" id="nameB" class="cname" placeholder="e.g. James Lim" value="${state.nameB}">
+      <div class="ferr" id="ferr-nameB">⚠ Please enter your name</div></div>
+      <div><div class="side-lbl b" style="margin-bottom:5px"><span class="sdot b"></span>Agency / Team <span style="color:#D85A30">*</span></div>
+      <input type="text" id="agencyB" placeholder="e.g. MOH, MOM, GovTech..." value="${state.agencyB}">
+      <div class="ferr" id="ferr-agencyB">⚠ Please enter your agency</div></div>
+      <div><div class="side-lbl b" style="margin-bottom:5px"><span class="sdot b"></span>Email <span style="color:#a0a0a0;font-size:10px;font-weight:600">(optional)</span></div>
+      <input type="email" id="emailB" placeholder="your.email@agency.gov.sg" value="${state.emailB}"></div>
+    </div>
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  q1:()=>`<div class="card"><div class="card-stripe stripe-blue"></div>
+    <div class="eyebrow">Step 3 of 12 <span class="chapter-tag">About You</span></div>
+    <span class="card-emoji">💻</span>
+    <div class="card-title">What are you both working on?</div>
+    <div class="card-sub">Share the digital services or products you are currently building or managing. Both of you answer!</div>
+    <div class="split-grid">
+      <div class="inp-col"><div class="side-lbl a"><span class="sdot a"></span>${state.nameA||'Buddy A'} <span style="color:#D85A30">*</span></div>
+      <textarea id="q1a" rows="4" placeholder="e.g. citizen portal, onboarding flows...">${state.q1a}</textarea>
+      <div class="ferr" id="ferr-q1a">⚠ Required</div></div>
+      <div class="inp-col"><div class="side-lbl b"><span class="sdot b"></span>${state.nameB||'Buddy B'} <span style="color:#D85A30">*</span></div>
+      <textarea id="q1b" rows="4" placeholder="e.g. citizen portal, onboarding flows...">${state.q1b}</textarea>
+      <div class="ferr" id="ferr-q1b">⚠ Required</div></div>
+    </div>
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  q2:()=>`<div class="card"><div class="card-stripe stripe-blue"></div>
+    <div class="eyebrow">Step 4 of 12 <span class="chapter-tag">About You</span></div>
+    <span class="card-emoji">🎯</span>
+    <div class="card-title">What's your biggest focus this year?</div>
+    <div class="card-sub">Key priorities or challenges in 2026. Be honest — this is a safe space! 😄</div>
+    <div class="split-grid">
+      <div class="inp-col"><div class="side-lbl a"><span class="sdot a"></span>${state.nameA||'Buddy A'} <span style="color:#D85A30">*</span></div>
+      <textarea id="q2a" rows="4" placeholder="e.g. driving adoption, stakeholder alignment...">${state.q2a}</textarea>
+      <div class="ferr" id="ferr-q2a">⚠ Required</div></div>
+      <div class="inp-col"><div class="side-lbl b"><span class="sdot b"></span>${state.nameB||'Buddy B'} <span style="color:#D85A30">*</span></div>
+      <textarea id="q2b" rows="4" placeholder="e.g. driving adoption, stakeholder alignment...">${state.q2b}</textarea>
+      <div class="ferr" id="ferr-q2b">⚠ Required</div></div>
+    </div>
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  catA:()=>`<div class="card"><div class="card-stripe stripe-amber"></div>
+    <div class="eyebrow">Step 5 of 12 <span class="chapter-tag">ACW Game Plan</span></div>
+    <span class="card-emoji">⭐</span>
+    <div class="card-title">${state.nameA||'Buddy A'}'s ACW focus</div>
+    <div class="card-sub">Which point categories are you focusing on? Tap all that apply!</div>
+    <div class="tags-wrap">${tagBtns('catA',['Learn','Grow','Value-Add'],'amber','catA')}</div>
+    <div class="terr" id="terr-catA">⚠ Please select at least one</div>
+    ${pointsRef()}
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  catB:()=>`<div class="card"><div class="card-stripe stripe-amber"></div>
+    <div class="eyebrow">Step 6 of 12 <span class="chapter-tag">ACW Game Plan</span></div>
+    <span class="card-emoji">🌟</span>
+    <div class="card-title">${state.nameB||'Buddy B'}'s ACW focus</div>
+    <div class="card-sub">Now ${state.nameB||'Buddy B'}'s turn — which categories are you going after?</div>
+    <div class="tags-wrap">${tagBtns('catB',['Learn','Grow','Value-Add'],'teal','catB')}</div>
+    <div class="terr" id="terr-catB">⚠ Please select at least one</div>
+    ${pointsRef()}
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  q3:()=>`<div class="card"><div class="card-stripe stripe-amber"></div>
+    <div class="eyebrow">Step 7 of 12 <span class="chapter-tag">ACW Game Plan</span></div>
+    <span class="card-emoji">🏃</span>
+    <div class="card-title">How are you earning your ACW points?</div>
+    <div class="card-sub">Activities you are doing — or could do more of — to rack up those points!</div>
+    <div class="split-grid">
+      <div class="inp-col"><div class="side-lbl a"><span class="sdot a"></span>${state.nameA||'Buddy A'} <span style="color:#D85A30">*</span></div>
+      <textarea id="q3a" rows="4" placeholder="e.g. talks, workshops, writing articles...">${state.q3a}</textarea>
+      <div class="ferr" id="ferr-q3a">⚠ Required</div></div>
+      <div class="inp-col"><div class="side-lbl b"><span class="sdot b"></span>${state.nameB||'Buddy B'} <span style="color:#D85A30">*</span></div>
+      <textarea id="q3b" rows="4" placeholder="e.g. talks, workshops, writing articles...">${state.q3b}</textarea>
+      <div class="ferr" id="ferr-q3b">⚠ Required</div></div>
+    </div>
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  q4:()=>`<div class="card"><div class="card-stripe stripe-teal"></div>
+    <div class="eyebrow">Step 8 of 12 <span class="chapter-tag">Work Together</span></div>
+    <span class="card-emoji">🚀</span>
+    <div class="card-title">How can you help each other win?</div>
+    <div class="card-sub">Onboarding users, driving adoption — how can you both support each other's mission?</div>
+    <textarea id="q4" rows="5" placeholder="e.g. share onboarding playbooks, cross-promote to each other's users...">${state.q4}</textarea>
+    <div class="ferr" id="ferr-q4">⚠ Required</div>
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  q5:()=>`<div class="card"><div class="card-stripe stripe-teal"></div>
+    <div class="eyebrow">Step 9 of 12 <span class="chapter-tag">Work Together</span></div>
+    <span class="card-emoji">🎤</span>
+    <div class="card-title">Any collab opportunities you're excited about?</div>
+    <div class="card-sub">Co-present, share case studies, joint demos — what could you do together?</div>
+    <textarea id="q5" rows="5" placeholder="e.g. joint session at next WISE event, co-authored article...">${state.q5}</textarea>
+    <div class="ferr" id="ferr-q5">⚠ Required</div>
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  checkin:()=>`<div class="card"><div class="card-stripe stripe-purple"></div>
+    <div class="eyebrow">Step 10 of 12 <span class="chapter-tag">Stay Connected</span></div>
+    <span class="card-emoji">📱</span>
+    <div class="card-title">How will you stay in touch?</div>
+    <div class="card-sub">Pick your go-to channel and how often you'll check in. Keep it realistic!</div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#6b6b6b;margin-bottom:9px">Check-in channel <span style="color:#D85A30">*</span></div>
+      <div class="tags-wrap">${tagBtns('channel',['Telegram','Slack','Teams','WhatsApp','Email'],'purple','channel')}</div>
+      <div class="terr" id="terr-channel">⚠ Please pick a channel</div>
+    </div>
+    <div>
+      <div style="font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#6b6b6b;margin-bottom:9px">How often? <span style="color:#D85A30">*</span></div>
+      <div class="tags-wrap">${tagBtns('freq',['Monthly','Quarterly','Ad hoc'],'teal','freq')}</div>
+      <div class="terr" id="terr-freq">⚠ Please pick a frequency</div>
+    </div>
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Next →</button>
+    </div></div>`,
+
+  q6:()=>`<div class="card"><div class="card-stripe stripe-purple"></div>
+    <div class="eyebrow">Step 11 of 12 <span class="chapter-tag">Next Steps</span></div>
+    <span class="card-emoji">📝</span>
+    <div class="card-title">What's your shared game plan?</div>
+    <div class="card-sub">Note your next steps, a date to reconnect, or anything you want to remember from today!</div>
+    <textarea id="q6" rows="5" placeholder="e.g. next check-in 15 June, share resources by end of May, explore co-presenting at the next WISE forum...">${state.q6}</textarea>
+    <div class="ferr" id="ferr-q6">⚠ Required</div>
+    <div class="card-nav">
+      <button class="btn-back" id="btnBack">← Back</button>
+      <button class="btn-next" id="btnNext">Submit &amp; get PDF →</button>
+    </div></div>`,
+
+  done:()=>`<div class="card"><div class="card-stripe stripe-multi"></div>
+    <div class="success-wrap">
+      <div style="font-size:56px">🎉</div>
+      <h2>All done!</h2>
+      <p>Your responses have been sent to the WISE team. Download your PDF notes to keep!</p>
+      <div id="submitStatus" style="margin:14px auto;padding:9px 16px;border-radius:10px;font-size:12.5px;font-weight:700;background:#E1F5EE;color:#085041;border:1.5px solid #1D9E75;max-width:360px">⏳ Sending to Google Sheets...</div>
+      <div style="margin-top:6px;display:flex;flex-direction:column;gap:10px;align-items:center">
+        <button class="btn-next" id="btnDownload" onclick="downloadPDF()" style="width:100%;justify-content:center">📄 Download PDF summary</button>
+        <div style="font-size:11.5px;color:#a0a0a0">If you entered your emails, a copy will be sent to your inboxes too.</div>
+      </div>
+    </div></div>`
+};
+
+function renderStep() {
+  const wrap = document.getElementById('cardWrap');
+  const old = wrap.querySelector('.card');
+  renderProgress();
+  const id = STEPS[state.step].id;
+  if (old) {
+    old.classList.add('exit');
+    setTimeout(function() {
+      old.remove();
+      wrap.insertAdjacentHTML('beforeend', RENDERS[id]());
+      bindStep(id);
+    }, 230);
+  } else {
+    wrap.insertAdjacentHTML('beforeend', RENDERS[id]());
+    bindStep(id);
+  }
+}
+
+function bindStep(id) {
+  const nb=document.getElementById('btnNext'), bb=document.getElementById('btnBack');
+  if(bb) bb.onclick=goBack;
+  if(nb && id!=='done') nb.onclick=()=>goNext(id);
+}
+
+function validate(id){
+  let ok=true;
+  function req(fid){
+    const el=document.getElementById(fid), empty=!el||!el.value.trim();
+    const e=document.getElementById('ferr-'+fid);
+    if(empty){if(el)el.classList.add('invalid');if(e)e.classList.add('show');ok=false;}
+    else{if(el)el.classList.remove('invalid');if(e)e.classList.remove('show');}
+  }
+  function treq(key){
+    const val=Array.isArray(state[key])?state[key].length>0:!!state[key];
+    const e=document.getElementById('terr-'+key);
+    if(!val){if(e)e.classList.add('show');ok=false;}else{if(e)e.classList.remove('show');}
+  }
+  if(id==='buddyA'){req('nameA');req('agencyA');}
+  if(id==='buddyB'){req('nameB');req('agencyB');}
+  if(id==='q1'){req('q1a');req('q1b');}
+  if(id==='q2'){req('q2a');req('q2b');}
+  if(id==='catA')treq('catA');
+  if(id==='catB')treq('catB');
+  if(id==='q3'){req('q3a');req('q3b');}
+  if(id==='q4')req('q4');
+  if(id==='q5')req('q5');
+  if(id==='checkin'){treq('channel');treq('freq');}
+  if(id==='q6')req('q6');
+  return ok;
+}
+
+function save(id){
+  const g=fid=>{const e=document.getElementById(fid);return e?e.value.trim():'';};
+  if(id==='buddyA'){state.nameA=g('nameA');state.agencyA=g('agencyA');state.emailA=g('emailA');}
+  if(id==='buddyB'){state.nameB=g('nameB');state.agencyB=g('agencyB');state.emailB=g('emailB');}
+  if(id==='q1'){state.q1a=g('q1a');state.q1b=g('q1b');}
+  if(id==='q2'){state.q2a=g('q2a');state.q2b=g('q2b');}
+  if(id==='q3'){state.q3a=g('q3a');state.q3b=g('q3b');}
+  if(id==='q4')state.q4=g('q4');
+  if(id==='q5')state.q5=g('q5');
+  if(id==='q6')state.q6=g('q6');
+}
+
+function goNext(id){
+  save(id);
+  if(!validate(id)){
+    const f=document.querySelector('.invalid,.terr.show');
+    if(f)f.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(id==='q6'){
+    doSubmit();
+    state.step++;
+    renderStep();
+    return;
+  }
+  state.step++;
+  renderStep();
+}
+function goBack(){save(STEPS[state.step].id);state.step=Math.max(0,state.step-1);renderStep();}
+
+async function doSubmit(){
+  const p={
+    timestamp:new Date().toLocaleString('en-SG',{timeZone:'Asia/Singapore'}),
+    nameA:state.nameA,nameB:state.nameB,agencyA:state.agencyA,agencyB:state.agencyB,
+    emailA:state.emailA,emailB:state.emailB,
+    q1a:state.q1a,q1b:state.q1b,q2a:state.q2a,q2b:state.q2b,
+    catA:state.catA.join(', '),catB:state.catB.join(', '),
+    q3a:state.q3a,q3b:state.q3b,q4:state.q4,q5:state.q5,
+    channel:state.channel,freq:state.freq,q6:state.q6
+  };
+  function setStatus(msg, ok) {
+    var el = document.getElementById('submitStatus');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.background = ok ? '#E1F5EE' : '#FAECE7';
+    el.style.color = ok ? '#085041' : '#7a2810';
+    el.style.borderColor = ok ? '#1D9E75' : '#D85A30';
+  }
+  try{
+    // Hidden iframe form POST — bypasses CORS when opening as a local file
+    var iframe = document.getElementById('hidden_iframe');
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.name = 'hidden_iframe';
+      iframe.id = 'hidden_iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = APPS_SCRIPT_URL;
+    form.target = 'hidden_iframe';
+    form.style.display = 'none';
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'payload';
+    input.value = JSON.stringify(p);
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+    setTimeout(function(){ setStatus('✅ Responses saved to Google Sheets!', true); }, 2500);
+  }catch(e){
+    setStatus('⚠️ Could not reach Google Sheets. Screenshot your PDF as backup.', false);
+  }
+}
+
+function downloadPDF(){
+  const a=state.nameA||'Buddy A',b=state.nameB||'Buddy B';
+  function row(label,val){if(!val)return'';return`<tr><td style="padding:7px 16px 7px 0;font-size:12.5px;font-weight:700;color:#555;width:200px;vertical-align:top">${label}</td><td style="padding:7px 0;font-size:13px;color:#1a1a1a;line-height:1.65">${val.replace(/\n/g,'<br>')}</td></tr>`;}
+  function pills(vals,cm){return(vals||'').split(', ').filter(Boolean).map(t=>{const[bg,col]=(cm[t]||'#f0f0f0:#333').split(':');return`<span style="display:inline-block;background:${bg};color:${col};font-size:11.5px;font-weight:700;padding:3px 12px;border-radius:99px;margin:2px 3px 2px 0">${t}</span>`;}).join('');}
+  const catC={'Learn':'#E6F1FB:#0C447C','Grow':'#FAEEDA:#633806','Value-Add':'#E1F5EE:#085041'};
+  const chC={'Telegram':'#E1F5EE:#085041','Slack':'#EEEDFE:#3C3489','Teams':'#E6F1FB:#0C447C','WhatsApp':'#E1F5EE:#085041','Email':'#FAEEDA:#633806','Monthly':'#EEEDFE:#3C3489','Quarterly':'#E6F1FB:#0C447C','Ad hoc':'#FAEEDA:#633806'};
+  const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>ACW Buddy Notes — ${a} & ${b}</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>body{font-family:'Nunito',sans-serif;max-width:720px;margin:32px auto;padding:0 24px 48px;color:#1a1a1a}.hero{background:#f7f6ff;border-radius:16px;padding:28px;margin-bottom:24px;border:1.5px solid #CECBF6}h1{font-family:'Caveat',cursive;font-size:36px;font-weight:700;margin:0 0 4px}.buddies{display:flex;gap:16px;margin-top:20px}.buddy-box{flex:1;background:white;border-radius:12px;padding:14px 18px;border:1.5px solid #e0ddd6}.buddy-name{font-family:'Caveat',cursive;font-size:24px;font-weight:700}h2{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#534AB7;border-bottom:2px solid #EEEDFE;padding-bottom:7px;margin:0 0 12px}.section{margin-bottom:24px}table{width:100%;border-collapse:collapse}@media print{body{margin:16px}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>
+</head><body>
+<div class="hero">
+  <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:#BA7517;margin-bottom:8px">✦ Agency Champions of WISE · GovTech</div>
+  <h1>Get To Know Your Buddy! 🤝</h1>
+  <div style="font-size:12.5px;color:#888;margin-top:6px">ACW Buddy Meetup · 14 May 2026 · ${new Date().toLocaleString('en-SG',{timeZone:'Asia/Singapore'})}</div>
+  <div class="buddies">
+    <div class="buddy-box"><div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#185FA5;margin-bottom:5px">Buddy A</div><div class="buddy-name">${a}</div>${state.agencyA?`<div style="font-size:12.5px;color:#888;margin-top:3px">${state.agencyA}</div>`:''}</div>
+    <div style="display:flex;align-items:center;font-size:22px">🤝</div>
+    <div class="buddy-box"><div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#0F6E56;margin-bottom:5px">Buddy B</div><div class="buddy-name">${b}</div>${state.agencyB?`<div style="font-size:12.5px;color:#888;margin-top:3px">${state.agencyB}</div>`:''}</div>
+  </div>
+</div>
+<div class="section"><h2>About You</h2><table>
+${row(a+' — Products & services',state.q1a)}${row(b+' — Products & services',state.q1b)}
+${row(a+' — Priorities & challenges',state.q2a)}${row(b+' — Priorities & challenges',state.q2b)}
+</table></div>
+<div class="section"><h2>ACW Game Plan</h2><table>
+<tr><td style="padding:7px 16px 7px 0;font-size:12.5px;font-weight:700;color:#555;vertical-align:top">${a} — Categories</td><td style="padding:7px 0">${pills(state.catA.join(', '),catC)}</td></tr>
+<tr><td style="padding:7px 16px 7px 0;font-size:12.5px;font-weight:700;color:#555;vertical-align:top">${b} — Categories</td><td style="padding:7px 0">${pills(state.catB.join(', '),catC)}</td></tr>
+${row(a+' — Activities',state.q3a)}${row(b+' — Activities',state.q3b)}
+</table></div>
+<div class="section"><h2>Ways to Work Together</h2><table>
+${row('Driving adoption together',state.q4)}${row('Collaboration opportunities',state.q5)}
+<tr><td style="padding:7px 16px 7px 0;font-size:12.5px;font-weight:700;color:#555;vertical-align:top">Keep in touch</td><td style="padding:7px 0">${pills(state.channel,chC)} ${pills(state.freq,chC)}</td></tr>
+${row('Next steps & notes',state.q6)}
+</table></div>
+<p style="font-size:11px;color:#bbb;margin-top:40px;border-top:1px solid #eee;padding-top:12px">Generated at ACW Buddy Meetup · Agency Champions of WISE · GovTech · 14 May 2026</p>
+</body></html>`;
+  const w=window.open('','_blank');
+  if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),800);}
+}
+
+renderStep();
+</script>
+</body>
+</html>
